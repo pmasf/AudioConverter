@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -15,9 +15,9 @@ namespace AudioConverter
         private static string _assetsDirectory = "assets";
         private static string _outputDirectory = "output";
         private static string _binariesDirectory = "binaries";
-        private static string _ffmpegBinaries = string.Format(@"{0}\{1}\ffmpeg.exe", _baseDirectoryPath, _binariesDirectory);
-        private static string _assetsDirectoryPath = string.Format(@"{0}\{1}", _baseDirectoryPath, _assetsDirectory);
-        private static string _outputDirectoryPath = string.Format(@"{0}\{1}", _baseDirectoryPath, _outputDirectory);
+        private static string _ffmpegBinaries = $@"{_baseDirectoryPath}\{_binariesDirectory}\ffmpeg.exe";
+        private static string _assetsDirectoryPath = $@"{_baseDirectoryPath}\{_assetsDirectory}";
+        private static string _outputDirectoryPath = $@"{_baseDirectoryPath}\{_outputDirectory}";
         private static string _inputFileExtension = "m4a";//wav or mp3 or any compatible audio type
         private static string _outputFileExtension = "mp3";// wav or mp3 or any compatible audio type (see the AudioConversion ffmpegProcess.StartInfo.Arguments part)
 
@@ -25,7 +25,7 @@ namespace AudioConverter
         {
             // Beginning of the output directory cleaning 
 
-            foreach (string currentOutputFile in Directory.GetFiles(_outputDirectoryPath, string.Format("*.{0}", _inputFileExtension)))
+            foreach (string currentOutputFile in Directory.GetFiles(_outputDirectoryPath, $"*.{_inputFileExtension}"))
             {
                 File.Delete(currentOutputFile);
             }
@@ -34,7 +34,7 @@ namespace AudioConverter
 
             // Beginning of the conversion process
 
-            string[] assetsFiles = Directory.GetFiles(_assetsDirectoryPath, string.Format("*.{0}", _inputFileExtension));
+            string[] assetsFiles = Directory.GetFiles(_assetsDirectoryPath, $"*.{_inputFileExtension}");
 
             foreach (string curentSrcFile in assetsFiles)
             {
@@ -45,7 +45,7 @@ namespace AudioConverter
 
             Console.WriteLine("END");
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         private static void AudioConversion(string srcFilePath)
@@ -54,16 +54,16 @@ namespace AudioConverter
 
             FileInfo fi = new FileInfo(srcFilePath);
             string ext = fi.Extension;
-            string destFileName = fi.Name.Replace(ext, string.Empty) + string.Format(".{0}", _outputFileExtension);
+            string destFileName = fi.Name.Replace(ext, string.Empty) + $".{_outputFileExtension}";
 
-            string outputFilePath = string.Format(@"{0}\{1}\{2}", _baseDirectoryPath, _outputDirectory, destFileName);
+            string outputFilePath = $@"{_baseDirectoryPath}\{_outputDirectory}\{destFileName}";
 
             // Configuring and executing the ffmpeg Process
 
             using (Process ffmpegProcess = new Process())
             {
                 ffmpegProcess.StartInfo.FileName = _ffmpegBinaries;
-                ffmpegProcess.StartInfo.Arguments = string.Format("-i \"{0}\" -codec:a libmp3lame -qscale:a 0 \"{1}\"", srcFilePath, outputFilePath);
+                ffmpegProcess.StartInfo.Arguments = $"-i \"{srcFilePath}\" -codec:a libmp3lame -qscale:a 0 \"{outputFilePath}\"";
                 //ffmpegProcess.StartInfo.Arguments = string.Format("-i \"{0}\" -codec:a aac \"{1}\"", srcFilePath, outputFilePath);//To convert to m4a file
                 //ffmpegProcess.StartInfo.Arguments = string.Format("-i \"{0}\" -acodec pcm_u8 -ar 22050 \"{1}\"", srcFilePath, outputFilePath);//To convert to wav file
 

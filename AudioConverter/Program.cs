@@ -36,9 +36,9 @@ namespace AudioConverter
 
             string[] assetsFiles = Directory.GetFiles(_assetsDirectoryPath, $"*.{_inputFileExtension}");
 
-            foreach (string curentSrcFile in assetsFiles)
+            foreach (string currentSrcFile in assetsFiles)
             {
-                AudioConversion(curentSrcFile);
+                AudioConversion(currentSrcFile);
             }
 
             // End of the conversion process
@@ -53,8 +53,9 @@ namespace AudioConverter
             // Recovering the source filename to correctly name the destination file (with the new extension)
 
             FileInfo fi = new FileInfo(srcFilePath);
-            string ext = fi.Extension;
-            string destFileName = fi.Name.Replace(ext, string.Empty) + $".{_outputFileExtension}";
+            
+            string srcfileExtension = fi.Extension;
+            string destFileName = fi.Name.Replace(srcfileExtension, string.Empty) + $".{_outputFileExtension}";
 
             string outputFilePath = $@"{_baseDirectoryPath}\{_outputDirectory}\{destFileName}";
 
